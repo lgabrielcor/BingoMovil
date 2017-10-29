@@ -3,6 +3,7 @@ package com.bingo.bingomaster.bingomovil;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.EditText;
@@ -10,6 +11,15 @@ import android.widget.Toast;
 
 import com.bingo.bingomaster.bingomovil.controladores.LoginControlador;
 import com.bingo.bingomaster.bingomovil.modelos.Login;
+
+import java.io.UnsupportedEncodingException;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -28,8 +38,9 @@ public class LoginActivity extends AppCompatActivity {
         extraerDatos(loginData);
 
         //autenticarse
-        String resultado = loginControlador.autenticarse(loginData);
+        //String resultado = loginControlador.autenticarse(loginData);
 
+        String resultado = "OK";
         if(resultado.equals("OK"))
         {
             Intent intent = new Intent(this, BingoManagerActivity.class);
@@ -50,6 +61,29 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void extraerDatos(Login loginData) {
+
+        String pass = String.valueOf(((EditText)findViewById(R.id.txtpassword)).getText());
+
+        com.bingo.bingomaster.bingomovil.servicios.cripto.criptoUtil cr = new com.bingo.bingomaster.bingomovil.servicios.cripto.criptoUtil();
+        try {
+            String enpass = cr.encrypt(pass);
+            Log.d("INFO", "extraerDatos: "+enpass);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (InvalidKeyException e) {
+            e.printStackTrace();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (NoSuchPaddingException e) {
+            e.printStackTrace();
+        } catch (InvalidAlgorithmParameterException e) {
+            e.printStackTrace();
+        } catch (IllegalBlockSizeException e) {
+            e.printStackTrace();
+        } catch (BadPaddingException e) {
+            e.printStackTrace();
+        }
+
         loginData.setServidor(String.valueOf(((EditText)findViewById(R.id.txtservidor)).getText()));
         loginData.setUsuario(String.valueOf(((EditText)findViewById(R.id.txtusuario)).getText()));
         loginData.setPassword(String.valueOf(((EditText)findViewById(R.id.txtpassword)).getText()));

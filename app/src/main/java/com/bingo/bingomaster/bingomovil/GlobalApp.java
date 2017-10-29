@@ -21,6 +21,7 @@ public class GlobalApp extends Application {
 
     private String idUsuario;
     private String servidor;
+    private int employeeId;
 
     public String getIdUsuario() {
         return idUsuario;
@@ -36,5 +37,13 @@ public class GlobalApp extends Application {
 
     public void setServidor(String servidor) {
         this.servidor = servidor;
+    }
+
+    public int getEmployeeId() {
+        return employeeId;
+    }
+
+    public void setEmployeeId(int employeeId) {
+        this.employeeId = employeeId;
     }
 }

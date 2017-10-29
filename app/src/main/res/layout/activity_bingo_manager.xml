@@ -118,7 +118,7 @@
                     android:layout_weight="1"
                     android:ems="10"
                     android:hint="Módulo"
-                    android:inputType="text" />
+                    android:inputType="number" />
 
             </LinearLayout>
 
@@ -134,6 +134,7 @@
                 android:id="@+id/btnScanner"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:onClick="btnScannerClick"
                 android:text="Scanner" />
 
             <TextView
@@ -141,6 +142,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Información" />
+
+            <Button
+                android:id="@+id/btnsalir"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="btnSalirClick"
+                android:text="Salir" />
         </LinearLayout>
 
     </LinearLayout>
