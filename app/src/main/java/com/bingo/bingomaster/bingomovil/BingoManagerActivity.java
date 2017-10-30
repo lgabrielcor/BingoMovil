@@ -7,8 +7,10 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bingo.bingomaster.bingomovil.controladores.BingoManagerControlador;
@@ -31,6 +33,20 @@ public class BingoManagerActivity extends AppCompatActivity {
         getSupportActionBar().hide();
         setContentView(R.layout.activity_bingo_manager);
         setOpcion(Modo.REGISTRAR);
+
+        EditText modulo = findViewById(R.id.txtModulo);
+        modulo.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
+                        (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                    // Perform action on key press
+                    ((EditText)findViewById(R.id.txtModulo)).setText(enviaInformacionAServidor());
+                    return true;
+                }
+                return false;
+            }
+        });
     }
 
     private void extraerDatos(){
@@ -93,6 +109,9 @@ public class BingoManagerActivity extends AppCompatActivity {
         } catch (SQLException e) {
             e.printStackTrace();
             showMessage("Error", e.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
+            showMessage("Error", e.getMessage());
         }
     }
 
@@ -118,5 +137,30 @@ public class BingoManagerActivity extends AppCompatActivity {
                 })
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .show();
+    }
+
+    public void btnRegistrarClick(View view) {
+        setOpcion(Modo.REGISTRAR);
+        TextView modo = (TextView) findViewById(R.id.lblModo);
+        modo.setText(Modo.REGISTRAR.substring(0,1).toUpperCase()+Modo.REGISTRAR.substring(1));
+        //input.substring(0, 1).toUpperCase() + input.substring(1);
+    }
+
+    public void btnRemoverClick(View view) {
+        setOpcion(Modo.BORRAR);
+        TextView modo = (TextView) findViewById(R.id.lblModo);
+        modo.setText(Modo.BORRAR.substring(0,1).toUpperCase()+Modo.BORRAR.substring(1));
+    }
+
+    public void btnLibreClick(View view) {
+        setOpcion(Modo.LIBRE);
+        TextView modo = (TextView) findViewById(R.id.lblModo);
+        modo.setText(Modo.LIBRE.substring(0,1).toUpperCase()+Modo.LIBRE.substring(1));
+    }
+
+    public void btnConsultarClick(View view) {
+        setOpcion(Modo.CONSULTAR);
+        TextView modo = (TextView) findViewById(R.id.lblModo);
+        modo.setText(Modo.CONSULTAR.substring(0,1).toUpperCase()+Modo.CONSULTAR.substring(1));
     }
 }

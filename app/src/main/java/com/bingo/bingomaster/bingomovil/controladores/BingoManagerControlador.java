@@ -22,8 +22,9 @@ public class BingoManagerControlador {
             paramsDeLectura.setSource(0);
             try {
                 gc = (new SQLServerServicios(GlobalApp.getInstance().getServidor())).GameCardInsert(paramsDeLectura);
-            } catch (SQLException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
+                throw e;
             }
 
             resultado = procesaResultadoRegistrar(paramsDeLectura.getReturn_value());
@@ -38,6 +39,7 @@ public class BingoManagerControlador {
                 gc = (new SQLServerServicios(GlobalApp.getInstance().getServidor())).GameCardDelete(paramsDeLectura);
             } catch (SQLException e) {
                 e.printStackTrace();
+                throw e;
             }
             resultado = procesaResultadoBorrar(paramsDeLectura.getReturn_value());
         }
@@ -52,6 +54,7 @@ public class BingoManagerControlador {
                 gc = (new SQLServerServicios(GlobalApp.getInstance().getServidor())).GameCardInsert(paramsDeLectura);
             } catch (SQLException e) {
                 e.printStackTrace();
+                throw e;
             }
 
             resultado = procesaResultadoRegistrar(paramsDeLectura.getReturn_value());
@@ -64,6 +67,7 @@ public class BingoManagerControlador {
                 (new SQLServerServicios(GlobalApp.getInstance().getServidor())).GameCardQuery(paramsDeLectura);
             } catch (SQLException e) {
                 e.printStackTrace();
+                throw e;
             }
             resultado = procesaResultadoConsultar(paramsDeLectura.getReturn_value());
         }

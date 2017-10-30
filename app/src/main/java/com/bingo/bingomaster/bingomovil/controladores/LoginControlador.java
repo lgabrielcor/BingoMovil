@@ -12,7 +12,7 @@ import java.sql.SQLException;
  */
 
 public class LoginControlador {
-    public String autenticarse(Login login) throws SQLException {
+    public String autenticarse(Login login) throws Exception {
         String resultado = "";
         Usuario usuario = (new SQLServerServicios(login.getServidor())).autenticarse(login, resultado);
         GlobalApp.getInstance().setIdUsuario(usuario.getId());
@@ -21,7 +21,7 @@ public class LoginControlador {
         return resultado;
     }
 
-    public String Salir() throws SQLException {
+    public String Salir() throws Exception {
         return (new SQLServerServicios(GlobalApp.getInstance().getServidor())).salir();
     }
 }
