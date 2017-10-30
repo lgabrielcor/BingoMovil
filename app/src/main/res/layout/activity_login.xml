@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:fitsSystemWindows="true"
@@ -12,6 +13,12 @@
         android:paddingTop="56dp"
         android:paddingLeft="24dp"
         android:paddingRight="24dp">
+
+        <TextView
+            android:id="@+id/lblBeta"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="App de prueba beta" />
 
         <ImageView android:src="@drawable/splash"
             android:layout_width="wrap_content"
@@ -27,6 +34,39 @@
             android:inputType="textPersonName"
             android:hint="servidor"
             android:id="@+id/txtservidor"/>
+
+        <EditText
+            android:id="@+id/txtpuerto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="puerto"
+            android:inputType="number"
+            android:text="1433" />
+
+        <EditText
+            android:id="@+id/txtesquema"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="escriba el esquema bbdd"
+            android:inputType="text" />
+
+        <EditText
+            android:id="@+id/txtserveruser"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="escriba el usuario BBDD"
+            android:inputType="textPersonName" />
+
+        <EditText
+            android:id="@+id/txtserverpassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="escriba el password bbdd"
+            android:inputType="text" />
 
         <EditText
             android:layout_width="match_parent"

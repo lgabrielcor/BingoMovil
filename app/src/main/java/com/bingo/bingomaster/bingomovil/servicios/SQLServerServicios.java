@@ -8,11 +8,15 @@ import com.bingo.bingomaster.bingomovil.modelos.GameCard;
 import com.bingo.bingomaster.bingomovil.modelos.GameCard_Insert_Params;
 import com.bingo.bingomaster.bingomovil.modelos.Login;
 import com.bingo.bingomaster.bingomovil.modelos.Usuario;
+
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
+import javax.microedition.khronos.opengles.GL;
 
 /**
  * Created by luisgabrielcorredorcombita on 28/10/17.
@@ -21,7 +25,7 @@ import java.sql.SQLException;
 public class SQLServerServicios {
 
     Connection conn;
-    public SQLServerServicios(String servidor){
+    public SQLServerServicios(String servidor) throws SQLException, ClassNotFoundException, Exception {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
         Connection connection = null;
@@ -29,19 +33,26 @@ public class SQLServerServicios {
 
         try {
             Class.forName("net.sourceforge.jtds.jdbc.Driver");
-            ConnectionURL = "jdbc:jtds:sqlserver://"+servidor+";port=1433;databaseName=bingo;user=admin;password=admin;";
+            ConnectionURL = "jdbc:jtds:sqlserver://"+servidor
+                    +";port="+GlobalApp.getInstance().getPuerto()
+                    +";databaseName="+GlobalApp.getInstance().getEsquema()
+                    +";user="+ GlobalApp.getInstance().getDBUsuario()
+                    +";password="+GlobalApp.getInstance().getDBPassword()+";";
             connection = DriverManager.getConnection(ConnectionURL);
         } catch (SQLException se) {
             Log.e("ERROR", se.getMessage());
+            throw se;
         } catch (ClassNotFoundException e) {
             Log.e("ERROR", e.getMessage());
+            throw e;
         } catch (Exception e) {
             Log.e("ERROR", e.getMessage());
+            throw e;
         }
         conn=connection;
     }
 
-    public Usuario autenticarse(Login login, String resultado) {
+    public Usuario autenticarse(Login login, String resultado) throws SQLException {
 
         String query = "SELECT u.Id, u.Password, u.Role, u.EmployeeId, E.Active, LoggedIn, e.Name NameEmployee"+
                 " FROM AppUser u INNER JOIN Employee E ON E.[Id] = u.EmployeeId WHERE u.Id = '" + login + "'";
@@ -71,12 +82,11 @@ public class SQLServerServicios {
             else{
                 resultado = "Fail";
             }
-
+            conn.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            Log.e("ERROR", e.getMessage());
+            throw e;
         }
-
-
 
         return usuario;
     }
@@ -90,6 +100,7 @@ public class SQLServerServicios {
             GlobalApp.getInstance().setIdUsuario(null);
             GlobalApp.getInstance().setEmployeeId(0);
             GlobalApp.getInstance().setServidor(null);
+            conn.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -101,44 +112,95 @@ public class SQLServerServicios {
     }
 
     public GameCard GameCardInsert(GameCard_Insert_Params paramsDeLectura) throws SQLException {
+
+        /*
+          @ModuleCode AS INT,
+          @ModuleRead AS VARCHAR(20),
+          @Multiplier AS INT,
+          @Source AS INT,
+          @EmployeeId AS INT
+        * */
         GameCard gc =  new GameCard();
 
-        String SPsql = "EXEC dbo.GameCard_Insert ?,?";   // for stored proc taking 2 parameters
-        Connection con = conn;   // java.sql.Connection
-        PreparedStatement ps = con.prepareStatement(SPsql);
-        ps.setEscapeProcessing(true);
-        ps.setQueryTimeout(15);
-        ps.setString(1, paramsDeLectura.getModuleRead());
-        ps.setInt(2, paramsDeLectura.getMultiplier());
-        ResultSet rs = ps.executeQuery();
+        CallableStatement cstmt = conn.prepareCall("{? = call dbo.GameCard_Insert(?,?,?,?,?)}");
+        cstmt.registerOutParameter(1, java.sql.Types.INTEGER);
 
+        cstmt.setString(3, paramsDeLectura.getModuleRead());
+        cstmt.setInt(2, Integer.parseInt(extraeNumero(paramsDeLectura.getModuleRead())));
+        cstmt.setInt(4, paramsDeLectura.getMultiplier());
+        cstmt.setInt(5, paramsDeLectura.getSource());
+        cstmt.setInt(6, GlobalApp.getInstance().getEmployeeId());
+        ResultSet rs = cstmt.executeQuery();
+        paramsDeLectura.setReturn_value(cstmt.getInt(1));
+        while(rs.next()){
+            gc.setGameId(rs.getInt(1));
+            gc.setEmployeeId(rs.getInt(2));
+            gc.setGameNumber(rs.getInt(3));
+            gc.setQtyModules(rs.getInt(4));
+            gc.setQtyProgressive(rs.getInt(5));
+            gc.setTotal(rs.getInt(6));
+            break;
+        }
 
+        cstmt.close();
+        conn.close();
         return gc;
     }
 
     public GameCard GameCardDelete(GameCard_Insert_Params paramsDeLectura) throws SQLException {
         GameCard gc =  new GameCard();
+        CallableStatement cstmt = conn.prepareCall("{? = call dbo.GameCard_Delete(?,?)}");
+        cstmt.registerOutParameter(1, java.sql.Types.INTEGER);
 
-        String SPsql = "EXEC dbo.GameCard_Delete ?,?";   // for stored proc taking 2 parameters
-        Connection con = conn;   // java.sql.Connection
-        PreparedStatement ps = con.prepareStatement(SPsql);
-        ps.setEscapeProcessing(true);
-        ps.setQueryTimeout(15);
-        ps.setString(1, paramsDeLectura.getModuleRead());
-        ps.setInt(2, paramsDeLectura.getMultiplier());
-        ResultSet rs = ps.executeQuery();
+        cstmt.setInt(2, Integer.parseInt(extraeNumero(paramsDeLectura.getModuleRead())));
+        cstmt.setInt(3, GlobalApp.getInstance().getEmployeeId());
+
+        ResultSet rs = cstmt.executeQuery();
+        paramsDeLectura.setReturn_value(cstmt.getInt(1));
+        while(rs.next()){
+            gc.setGameId(rs.getInt(1));
+            gc.setEmployeeId(rs.getInt(2));
+            gc.setGameNumber(rs.getInt(3));
+            gc.setQtyModules(rs.getInt(4));
+            gc.setQtyProgressive(rs.getInt(5));
+            gc.setTotal(rs.getInt(6));
+            break;
+        }
+
+        cstmt.close();
+        conn.close();
         return gc;
     }
 
     public void GameCardQuery(GameCard_Insert_Params paramsDeLectura) throws SQLException {
         //dbo.GameCard_Consult
-        String SPsql = "EXEC dbo.GameCard_Consult ?,?";   // for stored proc taking 2 parameters
-        Connection con = conn;   // java.sql.Connection
-        PreparedStatement ps = con.prepareStatement(SPsql);
-        ps.setEscapeProcessing(true);
-        ps.setQueryTimeout(15);
-        ps.setString(1, paramsDeLectura.getModuleRead());
-        ps.setInt(2, paramsDeLectura.getMultiplier());
-        ResultSet rs = ps.executeQuery();
+        CallableStatement cstmt = conn.prepareCall("{? = call dbo.GameCard_Consult(?)}");
+        cstmt.registerOutParameter(1, java.sql.Types.INTEGER);
+
+        cstmt.setInt(2, Integer.parseInt(extraeNumero(paramsDeLectura.getModuleRead())));
+
+        cstmt.execute();
+        paramsDeLectura.setReturn_value(cstmt.getInt(1));
+
+        cstmt.close();
+        conn.close();
+    }
+
+    private String extraeNumero(String codigo){
+        StringBuilder str = new StringBuilder();
+        char[] strarray = codigo.toCharArray();
+        for (char c : strarray)
+        {
+            if(Character.isDigit(c)){
+                str.append(c);
+            }
+        }
+
+        if(str.length()<1){
+            return "0";
+        }
+        else{
+            return str.toString();
+        }
     }
 }

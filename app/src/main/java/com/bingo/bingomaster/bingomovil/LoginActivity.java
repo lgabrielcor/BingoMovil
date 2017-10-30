@@ -1,6 +1,9 @@
 package com.bingo.bingomaster.bingomovil;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -36,28 +39,59 @@ public class LoginActivity extends AppCompatActivity {
         //obtener los datos de la pantalla
         Login loginData = new Login();
         extraerDatos(loginData);
+        try {
+            //autenticarse
+            String resultado = loginControlador.autenticarse(loginData);
 
-        //autenticarse
-        //String resultado = loginControlador.autenticarse(loginData);
+            //String resultado = "OK";
+            if(resultado.equals("OK"))
+            {
+                Intent intent = new Intent(this, BingoManagerActivity.class);
+                startActivity(intent);
+                finish();
+            }
+            else
+            {
+                Toast toast =
+                        Toast.makeText(getApplicationContext(),
+                                resultado, Toast.LENGTH_LONG);
 
-        String resultado = "OK";
-        if(resultado.equals("OK"))
-        {
-            Intent intent = new Intent(this, BingoManagerActivity.class);
-            startActivity(intent);
-            finish();
+                toast.setGravity(Gravity.CENTER|Gravity.TOP,0,0);
+
+                toast.show();
+
+                showMessage("Autenticacion", "Datos de autenticacion incorrectos");
+            }
+
+         }catch(Exception ex){
+            showMessage("Error", ex.getMessage());
+
         }
-        else
-        {
-            Toast toast =
-                    Toast.makeText(getApplicationContext(),
-                            resultado, Toast.LENGTH_LONG);
 
-            toast.setGravity(Gravity.CENTER|Gravity.TOP,0,0);
 
-            toast.show();
+    }
+
+    public void showMessage(String titulo, String mensaje){
+        AlertDialog.Builder builder;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            builder = new AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert);
+        } else {
+            builder = new AlertDialog.Builder(this);
         }
-
+        builder.setTitle(titulo)
+                .setMessage(mensaje)
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // continue with delete
+                    }
+                })
+                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // do nothing
+                    }
+                })
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
     }
 
     private void extraerDatos(Login loginData) {
@@ -87,5 +121,13 @@ public class LoginActivity extends AppCompatActivity {
         loginData.setServidor(String.valueOf(((EditText)findViewById(R.id.txtservidor)).getText()));
         loginData.setUsuario(String.valueOf(((EditText)findViewById(R.id.txtusuario)).getText()));
         loginData.setPassword(String.valueOf(((EditText)findViewById(R.id.txtpassword)).getText()));
+
+
+        //para servidor
+        GlobalApp.getInstance().setPuerto(String.valueOf(((EditText)findViewById(R.id.txtpuerto)).getText()));
+        GlobalApp.getInstance().setEsquema(String.valueOf(((EditText)findViewById(R.id.txtesquema)).getText()));
+        GlobalApp.getInstance().setDBUsuario(String.valueOf(((EditText)findViewById(R.id.txtserveruser)).getText()));
+        GlobalApp.getInstance().setDBPassword(String.valueOf(((EditText)findViewById(R.id.txtserverpassword)).getText()));
+
     }
 }

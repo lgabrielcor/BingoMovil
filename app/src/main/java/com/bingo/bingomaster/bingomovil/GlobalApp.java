@@ -22,6 +22,10 @@ public class GlobalApp extends Application {
     private String idUsuario;
     private String servidor;
     private int employeeId;
+    private String Puerto;
+    private String DBUsuario;
+    private String DBPassword;
+    private String Esquema;
 
     public String getIdUsuario() {
         return idUsuario;
@@ -45,5 +49,37 @@ public class GlobalApp extends Application {
 
     public void setEmployeeId(int employeeId) {
         this.employeeId = employeeId;
+    }
+
+    public String getPuerto() {
+        return Puerto;
+    }
+
+    public void setPuerto(String puerto) {
+        Puerto = puerto;
+    }
+
+    public String getDBUsuario() {
+        return DBUsuario;
+    }
+
+    public void setDBUsuario(String DBUsuario) {
+        this.DBUsuario = DBUsuario;
+    }
+
+    public String getDBPassword() {
+        return DBPassword;
+    }
+
+    public void setDBPassword(String DBPassword) {
+        this.DBPassword = DBPassword;
+    }
+
+    public String getEsquema() {
+        return Esquema;
+    }
+
+    public void setEsquema(String esquema) {
+        Esquema = esquema;
     }
 }

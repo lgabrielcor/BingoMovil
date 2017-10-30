@@ -12,7 +12,7 @@ import java.sql.SQLException;
  */
 
 public class BingoManagerControlador {
-    public String enviaInformacionAServidor(String modulo, int multiplicador, String opcion, GameCard gc) {
+    public String enviaInformacionAServidor(String modulo, int multiplicador, String opcion, GameCard gc) throws Exception {
         String resultado="";
         if(opcion.equals(Modo.REGISTRAR)){
             GameCard_Insert_Params paramsDeLectura = new GameCard_Insert_Params();
