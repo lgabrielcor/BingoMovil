@@ -206,4 +206,21 @@ public class SQLServerServicios {
             return str.toString();
         }
     }
+
+    public String registrarJuego(String numero, String valor) throws SQLException {
+
+        CallableStatement cstmt = conn.prepareCall("{? = call dbo.GameCard_Insert(?,?,?,?,?)}");
+        cstmt.registerOutParameter(1, java.sql.Types.INTEGER);
+        cstmt.setString(2, numero);
+        cstmt.setString(3, valor);
+
+        ResultSet rs = cstmt.executeQuery();
+        cstmt.getMoreResults();
+        int resultado = (cstmt.getInt(1));
+
+        cstmt.close();
+        conn.close();
+
+        return "OK";
+    }
 }
