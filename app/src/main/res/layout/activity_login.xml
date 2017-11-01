@@ -28,12 +28,13 @@
 
         <!-- Email Label -->
         <EditText
+            android:id="@+id/txtservidor"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:inputType="textPersonName"
             android:hint="servidor"
-            android:id="@+id/txtservidor"/>
+            android:inputType="textPersonName"
+            android:text="bingodb.database.windows.net" />
 
         <EditText
             android:id="@+id/txtpuerto"
@@ -50,7 +51,8 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="escriba el esquema bbdd"
-            android:inputType="text" />
+            android:inputType="text"
+            android:text="bingo" />
 
         <EditText
             android:id="@+id/txtserveruser"
@@ -58,7 +60,8 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="escriba el usuario BBDD"
-            android:inputType="textPersonName" />
+            android:inputType="textPersonName"
+            android:text="lgabrielcor" />
 
         <EditText
             android:id="@+id/txtserverpassword"
@@ -66,15 +69,17 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="escriba el password bbdd"
-            android:inputType="text" />
+            android:inputType="text"
+            android:text="luchocorre0716*" />
 
         <EditText
+            android:id="@+id/txtusuario"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:inputType="textPersonName"
             android:hint="usuario"
-            android:id="@+id/txtusuario"/>
+            android:inputType="textPersonName"
+            android:text="admin" />
 
         <EditText
             android:id="@+id/txtpassword"
@@ -82,7 +87,8 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="password"
-            android:inputType="textPassword" />
+            android:inputType="textPassword"
+            android:text="12345" />
 
         <Button
             android:layout_width="match_parent"

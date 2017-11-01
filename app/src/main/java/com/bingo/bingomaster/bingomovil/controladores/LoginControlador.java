@@ -13,15 +13,15 @@ import java.sql.SQLException;
 
 public class LoginControlador {
     public String autenticarse(Login login) throws Exception {
-        String resultado = "";
+        StringBuilder resultado = new StringBuilder();
         Usuario usuario = (new SQLServerServicios(login.getServidor())).autenticarse(login, resultado);
         GlobalApp.getInstance().setIdUsuario(usuario.getId());
         GlobalApp.getInstance().setServidor(login.getServidor());
 
-        return resultado;
+        return resultado.toString();
     }
 
     public String Salir() throws Exception {
-        return (new SQLServerServicios(GlobalApp.getInstance().getServidor())).salir();
+        return (new SQLServerServicios(GlobalApp.getInstance().getServidor())).logueado("false");
     }
 }

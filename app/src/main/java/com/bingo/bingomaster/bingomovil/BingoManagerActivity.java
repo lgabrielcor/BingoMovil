@@ -41,7 +41,7 @@ public class BingoManagerActivity extends AppCompatActivity {
                 if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
                         (keyCode == KeyEvent.KEYCODE_ENTER)) {
                     // Perform action on key press
-                    ((EditText)findViewById(R.id.txtModulo)).setText(enviaInformacionAServidor());
+                    ((TextView)findViewById(R.id.lblObservaciones)).setText(enviaInformacionAServidor());
                     return true;
                 }
                 return false;
@@ -51,7 +51,8 @@ public class BingoManagerActivity extends AppCompatActivity {
 
     private void extraerDatos(){
          modulo = String.valueOf(((EditText)findViewById(R.id.txtModulo)).getText());
-         multiplicador = Integer.getInteger(String.valueOf(((EditText)findViewById(R.id.txtProgresivo)).getText()));
+         String multiplicadorstr = String.valueOf(((EditText)findViewById(R.id.txtProgresivo)).getText());
+         multiplicador = Integer.parseInt(multiplicadorstr);
 
     }
 
@@ -77,16 +78,25 @@ public class BingoManagerActivity extends AppCompatActivity {
                 Log.d("MainActivity", "Scanned");
                 ((EditText)findViewById(R.id.txtModulo)).setText(result.getContents());
                 Toast.makeText(this, "Módulo: " + result.getContents(), Toast.LENGTH_LONG).show();
-                ((EditText)findViewById(R.id.txtModulo)).setText(enviaInformacionAServidor());
+                ((TextView)findViewById(R.id.lblObservaciones)).setText(enviaInformacionAServidor());
             }
         }
     }
 
     private String enviaInformacionAServidor(){
         try{
+            extraerDatos();
             String resultado;
             GameCard gc = new GameCard();
             resultado= (new BingoManagerControlador()).enviaInformacionAServidor(modulo, multiplicador, opcion, gc);
+
+            TextView reporte =  (TextView) findViewById(R.id.lblReporte);
+            StringBuilder strb = new StringBuilder();
+            strb.append("GameId "+gc.getGameId()+"\n");
+            strb.append("GameNumber "+gc.getGameNumber()+"\n");
+            strb.append("QtyModules "+gc.getQtyModules()+"\n");
+            strb.append("Total "+gc.getTotal()+"\n");
+            reporte.setText(strb.toString());
             return resultado;
         }catch (Exception e){
             showMessage("Error", e.getMessage());

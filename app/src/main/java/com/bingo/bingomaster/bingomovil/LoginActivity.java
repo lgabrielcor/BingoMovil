@@ -67,8 +67,6 @@ public class LoginActivity extends AppCompatActivity {
             showMessage("Error", ex.getMessage());
 
         }
-
-
     }
 
     public void showMessage(String titulo, String mensaje){

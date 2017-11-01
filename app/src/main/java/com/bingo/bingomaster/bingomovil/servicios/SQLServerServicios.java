@@ -52,10 +52,10 @@ public class SQLServerServicios {
         conn=connection;
     }
 
-    public Usuario autenticarse(Login login, String resultado) throws SQLException {
+    public Usuario autenticarse(Login login, StringBuilder resultado) throws SQLException {
 
         String query = "SELECT u.Id, u.Password, u.Role, u.EmployeeId, E.Active, LoggedIn, e.Name NameEmployee"+
-                " FROM AppUser u INNER JOIN Employee E ON E.[Id] = u.EmployeeId WHERE u.Id = '" + login + "'";
+                " FROM AppUser u INNER JOIN Employee E ON E.[Id] = u.EmployeeId WHERE u.Id = '" + login.getUsuario() + "'";
         ResultSet rs = null;
 
         Usuario usuario = new Usuario();
@@ -65,22 +65,22 @@ public class SQLServerServicios {
             //obtener solo el primer registro
             if(!rs.wasNull()){
                 while (rs.next()){
-                    usuario.setId(rs.getString(0));
-                    usuario.setPassword(rs.getString(1));
-                    usuario.setRole(rs.getInt(2));
-                    usuario.setEmployeeId(rs.getInt(3));
-                    usuario.setActive(rs.getBoolean(4));
-                    usuario.setLoggedIn(rs.getBoolean(5));
-                    usuario.setNameEmployee(rs.getString(6));
+                    usuario.setId(rs.getString(1));
+                    usuario.setPassword(rs.getString(2));
+                    usuario.setRole(rs.getInt(3));
+                    usuario.setEmployeeId(rs.getInt(4));
+                    usuario.setActive(rs.getBoolean(5));
+                    usuario.setLoggedIn(rs.getBoolean(6));
+                    usuario.setNameEmployee(rs.getString(7));
                     GlobalApp.getInstance().setEmployeeId(usuario.getEmployeeId());
                     GlobalApp.getInstance().setIdUsuario(usuario.getId());
-                    resultado = "OK";
+                    resultado.append("OK");
                     break;
                 }
-
+                logueado("true");
             }
             else{
-                resultado = "Fail";
+                resultado.append("Fail");
             }
             conn.close();
         } catch (SQLException e) {
@@ -91,8 +91,8 @@ public class SQLServerServicios {
         return usuario;
     }
 
-    public String salir(){
-        String queryUpdate="UPDATE AppUser SET LoggedIn = 'false' WHERE Id = '" + GlobalApp.getInstance().getIdUsuario() + "'";
+    public String logueado(String estado){
+        String queryUpdate="UPDATE AppUser SET LoggedIn = '"+estado+"' WHERE Id = '" + GlobalApp.getInstance().getIdUsuario() + "'";
 
         int resultado = 0;
         try {
@@ -131,7 +131,7 @@ public class SQLServerServicios {
         cstmt.setInt(5, paramsDeLectura.getSource());
         cstmt.setInt(6, GlobalApp.getInstance().getEmployeeId());
         ResultSet rs = cstmt.executeQuery();
-        paramsDeLectura.setReturn_value(cstmt.getInt(1));
+
         while(rs.next()){
             gc.setGameId(rs.getInt(1));
             gc.setEmployeeId(rs.getInt(2));
@@ -141,6 +141,9 @@ public class SQLServerServicios {
             gc.setTotal(rs.getInt(6));
             break;
         }
+
+        cstmt.getMoreResults();
+        paramsDeLectura.setReturn_value(cstmt.getInt(1));
 
         cstmt.close();
         conn.close();
@@ -154,8 +157,8 @@ public class SQLServerServicios {
 
         cstmt.setInt(2, Integer.parseInt(extraeNumero(paramsDeLectura.getModuleRead())));
         cstmt.setInt(3, GlobalApp.getInstance().getEmployeeId());
-
         ResultSet rs = cstmt.executeQuery();
+        cstmt.getMoreResults();
         paramsDeLectura.setReturn_value(cstmt.getInt(1));
         while(rs.next()){
             gc.setGameId(rs.getInt(1));
@@ -178,8 +181,8 @@ public class SQLServerServicios {
         cstmt.registerOutParameter(1, java.sql.Types.INTEGER);
 
         cstmt.setInt(2, Integer.parseInt(extraeNumero(paramsDeLectura.getModuleRead())));
-
         cstmt.execute();
+        cstmt.getMoreResults();
         paramsDeLectura.setReturn_value(cstmt.getInt(1));
 
         cstmt.close();
