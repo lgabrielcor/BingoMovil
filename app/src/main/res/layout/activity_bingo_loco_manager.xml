@@ -87,6 +87,16 @@
                 android:onClick="btnJugarClick"
                 android:text="Jugar" />
         </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Resultado: "
+                android:id="@+id/txtResultado"
+                tools:ignore="InvalidId" />
+        </LinearLayout>
 
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

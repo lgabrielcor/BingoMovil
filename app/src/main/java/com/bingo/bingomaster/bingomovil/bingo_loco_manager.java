@@ -4,6 +4,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.bingo.bingomaster.bingomovil.controladores.BingoLocoManagerControlador;
 
@@ -22,6 +23,7 @@ public class bingo_loco_manager extends AppCompatActivity {
         BingoLocoManagerControlador bingoLoco = new BingoLocoManagerControlador();
         String respuesta;
         respuesta = bingoLoco.registrarJuego(numero, valor);
+        ((TextView)findViewById(R.id.txtResultado)).setText(respuesta);
     }
     private void extraerDatos(){
        setNumero(((EditText)findViewById(R.id.txtNumero)).getText().toString());

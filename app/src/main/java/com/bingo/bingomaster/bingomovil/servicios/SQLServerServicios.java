@@ -207,9 +207,9 @@ public class SQLServerServicios {
         }
     }
 
-    public String registrarJuego(String numero, String valor) throws SQLException {
+    public String registrarJuegoBingoLoco(String numero, String valor) throws SQLException {
 
-        CallableStatement cstmt = conn.prepareCall("{? = call dbo.GameCard_Insert(?,?,?,?,?)}");
+        CallableStatement cstmt = conn.prepareCall("{? = call dbo.GameCard_Insert(?,?)}");
         cstmt.registerOutParameter(1, java.sql.Types.INTEGER);
         cstmt.setString(2, numero);
         cstmt.setString(3, valor);
@@ -221,6 +221,6 @@ public class SQLServerServicios {
         cstmt.close();
         conn.close();
 
-        return "OK";
+        return "OK resultado = "+resultado;
     }
 }

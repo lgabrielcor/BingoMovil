@@ -11,9 +11,10 @@ public class BingoLocoManagerControlador {
     public String registrarJuego(String numero, String valor) {
         String respuesta="";
         try {
-            respuesta = (new SQLServerServicios(GlobalApp.getInstance().getServidor())).registrarJuego(numero, valor);
+            respuesta = (new SQLServerServicios(GlobalApp.getInstance().getServidor())).registrarJuegoBingoLoco(numero, valor);
         } catch (Exception e) {
-            e.printStackTrace();
+            //e.printStackTrace();
+            return e.getMessage();
         }
         return respuesta;
     }

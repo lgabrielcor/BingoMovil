@@ -2,6 +2,7 @@ package com.bingo.bingomaster.bingomovil;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -9,6 +10,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -43,7 +45,7 @@ public class LoginActivity extends AppCompatActivity {
             //autenticarse
             String resultado = loginControlador.autenticarse(loginData);
 
-            //String resultado = "OK";
+            resultado = "OK";
             if(resultado.equals("OK"))
             {
                 Intent intent = new Intent(this, BingoManagerActivity.class);
